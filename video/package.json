@@ -1,0 +1,19 @@
+{
+  "name": "noteguessr-video",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "npx remotion studio --entry-file entry.jsx",
+    "build": "npx remotion render entry.jsx HeroVideo ../client/public/hero.mp4",
+    "preview": "npx remotion preview entry.jsx HeroVideo"
+  },
+  "dependencies": {
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5",
+    "remotion": "^4.0.0",
+    "@remotion/cli": "^4.0.0",
+    "@remotion/renderer": "^4.0.0",
+    "@remotion/bundler": "^4.0.0"
+  }
+}
