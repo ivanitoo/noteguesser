@@ -70,6 +70,7 @@ export function useAudio() {
         baseUrl: '/piano-acoustic/',
         release: 2,
       }).connect(reverb)
+      await Tone.loaded()
     }
   }, [getMasterGain])
 
@@ -83,6 +84,7 @@ export function useAudio() {
         baseUrl: '/guitar-acoustic/',
         release: 1.5,
       }).connect(reverb)
+      await Tone.loaded()
     }
   }, [getMasterGain])
 

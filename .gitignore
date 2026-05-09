@@ -4,6 +4,4 @@ data.db
 *.log
 .env
 client/public/hero.mp4
-client/public/guitar-acoustic/
-client/public/piano-acoustic/
 skills-lock.json
