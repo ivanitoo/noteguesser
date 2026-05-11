@@ -135,40 +135,42 @@ export default function GameBoard() {
         ▶ {game.playCount > 0 ? `Repetir (${game.playCount})` : 'Play'}
       </button>
 
-      <div className="w-full flex justify-center">
-        {mode === 'piano' && (
+      {mode === 'piano' && (
+        <div className="w-full flex justify-center" key="piano">
           <Piano
             onNoteClick={handlePianoClick}
             highlightNote={game.feedback === 'wrong' ? game.currentNote : null}
             feedbackNote={game.feedback === 'wrong' ? game.currentNote : null}
           />
-        )}
-        {mode === 'guitar' && (
+        </div>
+      )}
+      {mode === 'guitar' && (
+        <div className="w-full max-w-4xl" key="guitar">
           <Guitar
             onNoteClick={handleGuitarClick}
             highlightNote={game.feedback === 'wrong' ? game.currentNote : null}
             feedbackNote={game.feedback === 'wrong' ? game.currentNote : null}
           />
-        )}
-        {mode === 'slider' && (
-          <>
-            <SliderFreq
-              onSliderChange={handleSliderChange}
-              onSliderStart={handleSliderStart}
-              onSliderEnd={handleSliderEnd}
-              highlightFreq={targetFreq}
-              feedbackNote={game.feedback === 'wrong' ? targetNoteName : null}
-            />
-            {!sliderConfirmed && !game.feedback && (
-              <div className="flex justify-center mt-4">
-                <button onClick={handleSliderConfirm} className="line-art-btn px-8 py-2 text-sm">
-                  Confirmar nota
-                </button>
-              </div>
-            )}
-          </>
-        )}
-      </div>
+        </div>
+      )}
+      {mode === 'slider' && (
+        <div className="w-full max-w-4xl" key="slider">
+          <SliderFreq
+            onSliderChange={handleSliderChange}
+            onSliderStart={handleSliderStart}
+            onSliderEnd={handleSliderEnd}
+            highlightFreq={targetFreq}
+            feedbackNote={game.feedback === 'wrong' ? targetNoteName : null}
+          />
+          {!sliderConfirmed && !game.feedback && (
+            <div className="flex justify-center mt-4">
+              <button onClick={handleSliderConfirm} className="line-art-btn px-8 py-2 text-sm">
+                Confirmar nota
+              </button>
+            </div>
+          )}
+        </div>
+      )}
 
       <NoteDisplay
         noteName={targetNoteName}
