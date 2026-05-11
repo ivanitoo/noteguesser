@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useRef, useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { Guitar } from 'lucide-react'
 
@@ -13,38 +13,48 @@ export default function Landing() {
     setShowCta(t >= 12.3 && t <= 16.3)
   }
 
+  const wavePath = useMemo(() => {
+    const w = 1440, h = 300, c = h / 2
+    const pts = []
+    for (let x = 0; x <= w; x += 2) {
+      const y = c + Math.sin(x * 0.025) * 80 + Math.sin(x * 0.06) * 30 + Math.sin(x * 0.012) * 50
+      pts.push(`${x},${y}`)
+    }
+    return `M${pts.join(' L')}`
+  }, [])
+
   return (
     <div className="relative flex flex-col items-center px-4 py-16 text-center overflow-hidden">
-      {/* Piano keyboard background pattern */}
-      <div className="absolute inset-0 pointer-events-none select-none opacity-[0.035]">
-        <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+      {/* Deep navy gradient — smooth multi-stop */}
+      <div className="absolute inset-0 bg-gradient-to-b from-[#060a1a] via-[#0a0f2a] via-[#080c22] via-[#040816] to-black pointer-events-none select-none" />
+      {/* Navy blue glows */}
+      <div className="absolute top-[-15%] left-1/2 -translate-x-1/2 w-[1000px] h-[800px] bg-blue-900/[0.05] rounded-full blur-3xl pointer-events-none select-none" />
+      <div className="absolute bottom-[20%] right-[-5%] w-[500px] h-[500px] bg-blue-800/[0.03] rounded-full blur-3xl pointer-events-none select-none" />
+      {/* Navy waveform */}
+      <div className="absolute inset-0 pointer-events-none select-none flex items-center justify-center">
+        <svg className="w-full h-full" viewBox="0 0 1440 700" preserveAspectRatio="xMidYMid meet" opacity="0.1">
           <defs>
-            <pattern id="pianokeys" x="0" y="0" width="140" height="100%" patternUnits="userSpaceOnUse">
-              <rect x="0" y="0" width="20" height="100%" fill="rgba(255,255,255,0.6)" />
-              <rect x="20" y="0" width="1" height="100%" fill="rgba(255,255,255,0.9)" />
-              <rect x="21" y="0" width="19" height="100%" fill="rgba(255,255,255,0.6)" />
-              <rect x="40" y="0" width="1" height="100%" fill="rgba(255,255,255,0.9)" />
-              <rect x="41" y="0" width="19" height="100%" fill="rgba(255,255,255,0.6)" />
-              <rect x="60" y="0" width="1" height="100%" fill="rgba(255,255,255,0.9)" />
-              <rect x="61" y="0" width="19" height="100%" fill="rgba(255,255,255,0.6)" />
-              <rect x="80" y="0" width="1" height="100%" fill="rgba(255,255,255,0.9)" />
-              <rect x="81" y="0" width="19" height="100%" fill="rgba(255,255,255,0.6)" />
-              <rect x="100" y="0" width="1" height="100%" fill="rgba(255,255,255,0.9)" />
-              <rect x="101" y="0" width="19" height="100%" fill="rgba(255,255,255,0.6)" />
-              <rect x="120" y="0" width="1" height="100%" fill="rgba(255,255,255,0.9)" />
-              <rect x="121" y="0" width="19" height="100%" fill="rgba(255,255,255,0.6)" />
-              <rect x="140" y="0" width="1" height="100%" fill="rgba(255,255,255,0.9)" />
-
-              <rect x="4" y="0" width="16" height="60%" fill="rgba(0,0,0,0.9)" rx="1" />
-              <rect x="24" y="0" width="16" height="60%" fill="rgba(0,0,0,0.9)" rx="1" />
-              <rect x="64" y="0" width="16" height="60%" fill="rgba(0,0,0,0.9)" rx="1" />
-              <rect x="84" y="0" width="16" height="60%" fill="rgba(0,0,0,0.9)" rx="1" />
-              <rect x="104" y="0" width="16" height="60%" fill="rgba(0,0,0,0.9)" rx="1" />
-            </pattern>
+            <linearGradient id="waveNavy" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stopColor="#1e3a8a" stopOpacity="0" />
+              <stop offset="30%" stopColor="#1e40af" />
+              <stop offset="70%" stopColor="#1e3a8a" />
+              <stop offset="100%" stopColor="#1e3a8a" stopOpacity="0" />
+            </linearGradient>
           </defs>
-          <rect width="100%" height="100%" fill="url(#pianokeys)" />
+          <path d={`${wavePath}`} fill="none" stroke="url(#waveNavy)" strokeWidth="2" transform="translate(0, 240)" />
+          <path d={`${wavePath}`} fill="none" stroke="url(#waveNavy)" strokeWidth="4" transform="translate(0, 270)" opacity="0.5" />
+          <path d={`${wavePath}`} fill="none" stroke="url(#waveNavy)" strokeWidth="1.5" transform="translate(0, 310)" opacity="0.7" />
+          <path d={`${wavePath}`} fill="none" stroke="url(#waveNavy)" strokeWidth="6" transform="translate(0, 350)" opacity="0.15" />
         </svg>
       </div>
+      {/* Navy dot grid */}
+      <div
+        className="absolute inset-0 pointer-events-none select-none opacity-[0.04]"
+        style={{
+          backgroundImage: 'radial-gradient(circle, rgba(59,130,246,0.2) 1px, transparent 1px)',
+          backgroundSize: '40px 40px',
+        }}
+      />
       <div className="relative z-10 flex flex-col items-center">
 
       <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-3 text-white/90">

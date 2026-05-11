@@ -127,12 +127,12 @@ input[type="range"]::-moz-range-thumb {
 }
 
 .piano-key {
-  @apply border border-white/30 rounded-b cursor-pointer transition-all duration-200;
-  background: transparent;
+  @apply border border-white/30 cursor-pointer transition-all duration-200;
+  background: #000;
 }
 
 .piano-key.white {
-  @apply h-40 w-12;
+  @apply h-40 w-10;
   border-bottom-width: 3px;
 }
 

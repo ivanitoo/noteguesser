@@ -45,7 +45,7 @@ const Piano = memo(function Piano({ onNoteClick, highlightNote, feedbackNote }) 
   return (
     <div className="instrument-container relative">
       {/* Black keys */}
-      <div className="flex absolute top-0 left-0 pointer-events-none" style={{ marginLeft: '36px' }}>
+      <div className="flex absolute top-0 left-0 pointer-events-none" style={{ marginLeft: '2px' }}>
         {BLACK_KEYS.map((midi) => {
           // Position calculation based on white key index
           const whiteIndex = WHITE_KEYS.indexOf(midi - 1)
@@ -57,7 +57,7 @@ const Piano = memo(function Piano({ onNoteClick, highlightNote, feedbackNote }) 
               style={{
                 marginLeft: whiteIndex >= 0 ? '0' : undefined,
                 position: 'relative',
-                left: `${whiteIndex * 48 + 24}px`,
+                left: `${whiteIndex * 40 + 24}px`,
                 width: '28px',
                 marginRight: '-28px',
               }}
@@ -77,6 +77,7 @@ const Piano = memo(function Piano({ onNoteClick, highlightNote, feedbackNote }) 
             key={midi}
             onClick={() => handleClick(midi)}
             className={keyClass(midi, true)}
+            style={{ flexShrink: 0, position: 'relative' }}
             title={noteName(midi)}
           >
             <span className="text-[10px] absolute bottom-2 left-1/2 -translate-x-1/2 text-white/60">

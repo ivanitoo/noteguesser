@@ -71,7 +71,7 @@ export default function BackgroundMusic() {
 
   useEffect(() => {
     if (synthRef.current) {
-      const db = isMuted ? -Infinity : -22 + (volume * 18)
+      const db = isMuted ? -Infinity : -30 + (volume * 16)
       synthRef.current.volume.rampTo(db, 0.3)
     }
   }, [volume, isMuted])
