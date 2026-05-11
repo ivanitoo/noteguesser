@@ -135,7 +135,7 @@ export default function GameBoard() {
         ▶ {game.playCount > 0 ? `Repetir (${game.playCount})` : 'Play'}
       </button>
 
-      <div className="w-full max-w-4xl">
+      <div className="w-full flex justify-center">
         {mode === 'piano' && (
           <Piano
             onNoteClick={handlePianoClick}

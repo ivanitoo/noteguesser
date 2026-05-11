@@ -137,16 +137,18 @@ input[type="range"]::-moz-range-thumb {
 }
 
 .piano-key.black {
-  @apply h-24 w-8 -ml-4 -mr-4 z-10;
+  @apply z-10;
   border-bottom-width: 3px;
   background: #111;
   border-color: #fff;
-  margin-left: -16px;
-  margin-right: -16px;
 }
 
 .piano-key:hover {
   @apply bg-white/[0.06];
+}
+
+.piano-key.black:hover {
+  background: #2a2a2a;
 }
 
 .piano-key.active {

@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react'
 import { noteName, midiToFreq } from '../utils/notes.js'
 
-const NOTE_POOL = Array.from({ length: 25 }, (_, i) => i + 48)
+const NOTE_POOL = Array.from({ length: 13 }, (_, i) => i + 48)
 
 export function useGameLogic() {
   const [currentNote, setCurrentNote] = useState(null)
