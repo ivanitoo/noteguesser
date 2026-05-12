@@ -3,19 +3,10 @@ import { useLocation } from 'react-router-dom'
 import * as Tone from 'tone'
 import { useVolume } from '../context/VolumeContext.jsx'
 
-const CHORDS = [
-  ['C3', 'G3', 'A3', 'E4'],
-  ['F2', 'C3', 'F3', 'A3'],
-  ['G2', 'D3', 'G3', 'B3'],
-  ['A2', 'E3', 'A3', 'C4'],
-]
-
 export default function BackgroundMusic() {
   const { volume, isMuted, getMasterGain } = useVolume()
   const location = useLocation()
-  const synthRef = useRef(null)
-  const intervalRef = useRef(null)
-  const chordIndexRef = useRef(0)
+  const playerRef = useRef(null)
   const startedRef = useRef(false)
 
   useEffect(() => {
@@ -28,24 +19,14 @@ export default function BackgroundMusic() {
       startedRef.current = true
 
       const gain = getMasterGain()
-      const reverb = new Tone.Reverb({ decay: 5, wet: 0.4 }).connect(gain)
-      const chorus = new Tone.Chorus(0.4, 2, 0.2).connect(reverb)
-      chorus.start()
+      const db = isMuted ? -100 : -14 + (volume * 16)
 
-      synthRef.current = new Tone.PolySynth(Tone.Synth, {
-        oscillator: { type: 'triangle' },
-        envelope: { attack: 1, decay: 0.5, sustain: 0.3, release: 3 },
-      }).connect(chorus)
-
-      const playChord = () => {
-        if (!synthRef.current) return
-        const chord = CHORDS[chordIndexRef.current % CHORDS.length]
-        synthRef.current.triggerAttackRelease(chord, 4)
-        chordIndexRef.current++
-      }
-
-      playChord()
-      intervalRef.current = setInterval(playChord, 5500)
+      playerRef.current = new Tone.Player({
+        url: '/noteguesser.mp3',
+        loop: true,
+        autostart: true,
+        volume: db,
+      }).connect(gain)
     }
 
     const onInteraction = () => {
@@ -59,20 +40,19 @@ export default function BackgroundMusic() {
     return () => {
       cancelled = true
       document.removeEventListener('pointerdown', onInteraction)
-      if (intervalRef.current) clearInterval(intervalRef.current)
-      if (synthRef.current) {
-        synthRef.current.releaseAll()
-        synthRef.current.dispose()
-        synthRef.current = null
+      if (playerRef.current) {
+        playerRef.current.stop()
+        playerRef.current.dispose()
+        playerRef.current = null
       }
       startedRef.current = false
     }
   }, [location.pathname, getMasterGain])
 
   useEffect(() => {
-    if (synthRef.current) {
-      const db = isMuted ? -Infinity : -30 + (volume * 16)
-      synthRef.current.volume.rampTo(db, 0.3)
+    if (playerRef.current) {
+      const db = isMuted ? -Infinity : -14 + (volume * 16)
+      playerRef.current.volume.rampTo(db, 0.3)
     }
   }, [volume, isMuted])
 
