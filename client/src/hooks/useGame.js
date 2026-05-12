@@ -27,7 +27,7 @@ export function useGameLogic() {
 
   const checkFreqAccuracy = useCallback((guessFreq, targetFreq) => {
     const cents = 1200 * Math.log2(guessFreq / targetFreq)
-    const accuracy = Math.max(0, Math.min(100, Math.round(100 * (1 - Math.abs(cents) / 50))))
+    const accuracy = Math.max(0, Math.min(100, Math.round(100 * (1 - Math.abs(cents) / 100))))
     const correct = accuracy >= 90
     setFeedback(correct ? 'correct' : 'wrong')
     return { correct, accuracy }
