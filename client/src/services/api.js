@@ -1,6 +1,7 @@
 import axios from 'axios'
 
-const API_URL = import.meta.env.VITE_API_URL || ''
+const isProduction = !['localhost', '127.0.0.1'].includes(window.location.hostname)
+const API_URL = import.meta.env.VITE_API_URL || (isProduction ? 'https://noteguesser-api.onrender.com' : '')
 
 const api = axios.create({
   baseURL: `${API_URL}/api`,

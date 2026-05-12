@@ -24,15 +24,22 @@ router.get('/', async (req, res) => {
   try {
     const { data, error } = await supabase
       .from('scores')
-      .select('player_name, mode, score, total, created_at')
+      .select('player_name, score, total')
       .eq('mode', mode)
       .gte('created_at', getWeekStart())
-      .order('created_at', { ascending: false })
-      .limit(50)
 
     if (error) throw error
 
-    const sorted = (data || [])
+    const agg = {}
+    for (const row of data || []) {
+      if (!agg[row.player_name]) {
+        agg[row.player_name] = { player_name: row.player_name, score: 0, total: 0 }
+      }
+      agg[row.player_name].score += row.score
+      agg[row.player_name].total += row.total
+    }
+
+    const sorted = Object.values(agg)
       .map((e) => ({ ...e, ratio: e.total > 0 ? e.score / e.total : 0 }))
       .sort((a, b) => b.ratio - a.ratio || b.score - a.score)
       .slice(0, 10)

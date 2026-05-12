@@ -49,7 +49,7 @@ export default function GameBoard() {
   const saveGameScore = useCallback((correct) => {
     const playerName = getPlayerName()
     if (playerName) {
-      saveScore(playerName, mode, correct ? 1 : 0, 1).catch(() => {})
+      saveScore(playerName, mode, correct ? 1 : 0, 1).catch((err) => console.error('Error guardando score:', err.response?.data || err.message))
     }
   }, [mode])
 
