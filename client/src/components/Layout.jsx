@@ -1,9 +1,12 @@
 import { Outlet, Link, useLocation } from 'react-router-dom'
 import VolumeControl from './VolumeControl.jsx'
 import BackgroundMusic from './BackgroundMusic.jsx'
+import LanguageSwitcher from './LanguageSwitcher.jsx'
+import { useLocale } from '../context/LocaleContext.jsx'
 
 export default function Layout() {
   const location = useLocation()
+  const { t } = useLocale()
 
   const linkClass = (path) =>
     `transition-all duration-200 ${
@@ -20,13 +23,14 @@ export default function Layout() {
         <nav className="relative max-w-6xl mx-auto flex items-center justify-between px-6 py-4">
           <div className="flex items-center gap-4">
             <Link to="/" className="text-xl font-bold tracking-tight text-white/90 hover:text-white transition-colors duration-200">
-              ♫ Adivina la Nota
+              {t('app.title')}
             </Link>
             <VolumeControl />
           </div>
-          <div className="flex items-center gap-6 text-sm font-medium">
-            <Link to="/game" className={linkClass('/game')}>Jugar</Link>
-            <Link to="/leaderboard" className={linkClass('/leaderboard')}>Ranking</Link>
+          <div className="flex items-center gap-4 text-sm font-medium">
+            <Link to="/game" className={linkClass('/game')}>{t('nav.play')}</Link>
+            <Link to="/leaderboard" className={linkClass('/leaderboard')}>{t('nav.ranking')}</Link>
+            <LanguageSwitcher />
           </div>
         </nav>
       </header>

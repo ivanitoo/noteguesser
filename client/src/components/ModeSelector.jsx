@@ -1,8 +1,11 @@
+import { useLocale } from '../context/LocaleContext.jsx'
+
 export default function ModeSelector({ mode, onChange }) {
+  const { t } = useLocale()
   const modes = [
-    { id: 'piano', label: 'Piano', icon: '♫' },
-    { id: 'guitar', label: 'Guitarra', icon: '♬' },
-    { id: 'slider', label: 'Slider Hz', icon: '〜' },
+    { id: 'piano', label: t('mode.piano'), icon: '♫' },
+    { id: 'guitar', label: t('mode.guitar'), icon: '♬' },
+    { id: 'slider', label: t('mode.slider'), icon: '〜' },
   ]
 
   return (

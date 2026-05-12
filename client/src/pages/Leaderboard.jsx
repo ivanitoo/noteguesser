@@ -1,14 +1,15 @@
 import { useState, useEffect, useCallback } from 'react'
 import { getLeaderboard } from '../services/api.js'
 import { supabase } from '../services/supabase.js'
-
-const MODES = [
-  { id: 'piano', label: 'Piano' },
-  { id: 'guitar', label: 'Guitarra' },
-  { id: 'slider', label: 'Slider Hz' },
-]
+import { useLocale } from '../context/LocaleContext.jsx'
 
 export default function Leaderboard() {
+  const { t } = useLocale()
+  const MODES = [
+    { id: 'piano', label: t('mode.piano') },
+    { id: 'guitar', label: t('mode.guitar') },
+    { id: 'slider', label: t('mode.slider') },
+  ]
   const [mode, setMode] = useState('piano')
   const [entries, setEntries] = useState([])
   const [loading, setLoading] = useState(true)
@@ -46,7 +47,7 @@ export default function Leaderboard() {
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-8">
-      <h2 className="text-2xl font-bold tracking-tight mb-8 text-center">Ranking</h2>
+      <h2 className="text-2xl font-bold tracking-tight mb-8 text-center">{t('leaderboard.title')}</h2>
 
       <div className="flex gap-3 justify-center mb-8">
         {MODES.map((m) => (
@@ -61,18 +62,18 @@ export default function Leaderboard() {
       </div>
 
       {loading ? (
-        <p className="text-center text-white/40">Cargando...</p>
+        <p className="text-center text-white/40">{t('leaderboard.loading')}</p>
       ) : entries.length === 0 ? (
-        <p className="text-center text-white/40">Todavía no hay puntajes esta semana. ¡Sé el primero!</p>
+        <p className="text-center text-white/40">{t('leaderboard.empty')}</p>
       ) : (
         <div className="border border-white/10 rounded-xl overflow-hidden">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-white/10 text-white/40">
-                <th className="text-left px-4 py-3 font-medium">#</th>
-                <th className="text-left px-4 py-3 font-medium">Jugador</th>
-                <th className="text-right px-4 py-3 font-medium">Puntaje</th>
-                <th className="text-right px-4 py-3 font-medium">Precisión</th>
+                <th className="text-left px-4 py-3 font-medium">{t('leaderboard.rank')}</th>
+                <th className="text-left px-4 py-3 font-medium">{t('leaderboard.player')}</th>
+                <th className="text-right px-4 py-3 font-medium">{t('leaderboard.score')}</th>
+                <th className="text-right px-4 py-3 font-medium">{t('leaderboard.accuracy')}</th>
               </tr>
             </thead>
             <tbody>

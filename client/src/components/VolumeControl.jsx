@@ -1,6 +1,8 @@
 import { useVolume } from '../context/VolumeContext.jsx'
+import { useLocale } from '../context/LocaleContext.jsx'
 
 export default function VolumeControl() {
+  const { t } = useLocale()
   const { volume, isMuted, setVolume, toggleMute } = useVolume()
 
   return (
@@ -8,7 +10,7 @@ export default function VolumeControl() {
       <button
         onClick={toggleMute}
         className="text-xs leading-none text-white/30 hover:text-white/60 transition-colors duration-200"
-        title={isMuted ? 'Activar sonido' : 'Silenciar'}
+        title={isMuted ? t('volume.activate') : t('volume.mute')}
       >
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           {isMuted || volume === 0 ? (

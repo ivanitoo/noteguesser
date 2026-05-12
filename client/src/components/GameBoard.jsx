@@ -5,6 +5,7 @@ import { useGame } from '../context/GameContext.jsx'
 import { noteName, midiToFreq } from '../utils/notes.js'
 import { saveScore } from '../services/api.js'
 import { getPlayerName } from './NamePrompt.jsx'
+import { useLocale } from '../context/LocaleContext.jsx'
 import ModeSelector from './ModeSelector.jsx'
 import ScoreBoard from './ScoreBoard.jsx'
 import NoteDisplay from './NoteDisplay.jsx'
@@ -16,6 +17,7 @@ const MIN_SLIDER_FREQ = 130.81
 const MAX_SLIDER_FREQ = 523.25
 
 export default function GameBoard() {
+  const { t } = useLocale()
   const { mode, setMode, addResult, resetGame, score, total, streak } = useGame()
   const { playNote, playSliderFreq, startSliderFreq, updateSliderFreq, stopSlider } = useAudio()
   const game = useGameLogic()
@@ -132,7 +134,7 @@ export default function GameBoard() {
         disabled={!!game.feedback}
         className="line-art-btn px-8 py-3 text-lg disabled:opacity-30"
       >
-        ▶ {game.playCount > 0 ? `Repetir (${game.playCount})` : 'Play'}
+        ▶ {game.playCount > 0 ? t('game.repeat', { count: game.playCount }) : t('game.play')}
       </button>
 
       {mode === 'piano' && (
@@ -165,7 +167,7 @@ export default function GameBoard() {
           {!sliderConfirmed && !game.feedback && (
             <div className="flex justify-center mt-4">
               <button onClick={handleSliderConfirm} className="line-art-btn px-8 py-2 text-sm">
-                Confirmar nota
+                {t('game.confirm')}
               </button>
             </div>
           )}
@@ -181,7 +183,7 @@ export default function GameBoard() {
 
       {game.feedback && (
         <button onClick={handleNext} className="line-art-btn px-8 py-2 text-sm mt-2">
-          Siguiente nota →
+          {t('game.next')}
         </button>
       )}
     </div>

@@ -1,8 +1,10 @@
 import { useRef, useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { Guitar } from 'lucide-react'
+import { useLocale } from '../context/LocaleContext.jsx'
 
 export default function Landing() {
+  const { t } = useLocale()
   const videoRef = useRef(null)
   const [showCta, setShowCta] = useState(false)
 
@@ -58,10 +60,10 @@ export default function Landing() {
       <div className="relative z-10 flex flex-col items-center">
 
       <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-3 text-white/90">
-        Adivina la Nota
+        {t('landing.title')}
       </h1>
       <p className="text-base text-white/50 max-w-md mb-10 leading-relaxed">
-        Entrena tu oído musical. Escucha la nota, encuéntrala en el piano, la guitarra o con el slider de frecuencia.
+        {t('landing.subtitle')}
       </p>
 
       <div className="flex gap-4 mb-16">
@@ -69,14 +71,14 @@ export default function Landing() {
           to="/game"
           className="group relative inline-block rounded-xl px-8 py-3 text-white font-medium border border-white/20 hover:border-white/40 transition-all duration-300 overflow-hidden"
         >
-          <span className="relative z-10">Jugar ahora</span>
+          <span className="relative z-10">{t('landing.cta')}</span>
           <span className="absolute inset-0 bg-white/[0.04] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
         </Link>
         <Link
           to="/leaderboard"
           className="inline-block rounded-xl px-8 py-3 text-white/40 font-medium border border-white/[0.06] hover:border-white/20 hover:text-white/70 transition-all duration-300"
         >
-          Ranking
+          {t('landing.ranking')}
         </Link>
       </div>
 
@@ -100,16 +102,16 @@ export default function Landing() {
               animation: 'ctaFadeIn 0.4s ease-out',
             }}
           >
-            Jugar ahora →
+            {t('landing.cta2')}
           </Link>
         )}
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-3xl w-full">
         {[
-          { icon: '♫', title: 'Modo Piano', desc: '2 octavas completas con sostenidos. Toca la nota que escuchaste.' },
-          { icon: <Guitar size={24} className="inline-block" />, title: 'Modo Guitarra', desc: 'Mástil interactivo con 6 cuerdas y 12 trastes. Encuentra la nota.' },
-          { icon: '〜', title: 'Modo Slider', desc: 'Ajusta la frecuencia en Hz. Prueba tu oído absoluto.' },
+          { icon: '♫', title: t('landing.mode.piano.title'), desc: t('landing.mode.piano.desc') },
+          { icon: <Guitar size={24} className="inline-block" />, title: t('landing.mode.guitar.title'), desc: t('landing.mode.guitar.desc') },
+          { icon: '〜', title: t('landing.mode.slider.title'), desc: t('landing.mode.slider.desc') },
         ].map((feature) => (
           <div
             key={feature.title}
