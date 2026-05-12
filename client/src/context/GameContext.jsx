@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from 'react'
+import { createContext, useContext, useState, useRef } from 'react'
 
 const GameContext = createContext(null)
 
@@ -12,28 +12,48 @@ export function GameProvider({ children }) {
   const [lastResult, setLastResult] = useState(null)
   const [gameOver, setGameOver] = useState(false)
 
-  const addResult = (correct) => {
-    const nextScore = score + (correct ? 1 : 0)
-    const nextTotal = total + 1
-    setScore(nextScore)
-    setTotal(nextTotal)
-    setStreak(correct ? streak + 1 : 0)
-    setLastResult(correct ? 'correct' : 'wrong')
-    if (nextTotal - nextScore >= MAX_WRONG) {
-      setGameOver(true)
-    }
-  }
+  const scoreRef = useRef(0)
+  const totalRef = useRef(0)
+  const gameOverRef = useRef(false)
 
-  const resetGame = () => {
+  const resetAll = () => {
+    scoreRef.current = 0
+    totalRef.current = 0
     setScore(0)
     setTotal(0)
     setStreak(0)
     setLastResult(null)
+    setGameOver(false)
+    gameOverRef.current = false
+  }
+
+  const addResult = (correct) => {
+    const nextScore = correct ? scoreRef.current + 1 : scoreRef.current
+    const nextTotal = totalRef.current + 1
+    scoreRef.current = nextScore
+    totalRef.current = nextTotal
+
+    setScore(nextScore)
+    setTotal(nextTotal)
+    setStreak(correct ? (s) => s + 1 : 0)
+    setLastResult(correct ? 'correct' : 'wrong')
+
+    if (nextTotal - nextScore >= MAX_WRONG) {
+      gameOverRef.current = true
+      if (nextScore === 0) {
+        resetAll()
+      } else {
+        setGameOver(true)
+      }
+    }
+  }
+
+  const resetGame = () => {
+    resetAll()
   }
 
   const restartGame = () => {
-    resetGame()
-    setGameOver(false)
+    resetAll()
   }
 
   return (

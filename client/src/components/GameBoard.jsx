@@ -24,7 +24,6 @@ export default function GameBoard() {
   const [sliderConfirmed, setSliderConfirmed] = useState(false)
   const [sliderAccuracy, setSliderAccuracy] = useState(null)
   const sliderTargetRef = useRef(null)
-  const zeroScoreAutoRestart = useRef(false)
 
   const startRound = useCallback(() => {
     game.generateNote()
@@ -37,16 +36,6 @@ export default function GameBoard() {
       startRound()
     }
   }, [game.currentNote, game.feedback, startRound])
-
-  useEffect(() => {
-    if (gameOver && score === 0 && !zeroScoreAutoRestart.current) {
-      zeroScoreAutoRestart.current = true
-      handleRestart()
-    }
-    if (!gameOver) {
-      zeroScoreAutoRestart.current = false
-    }
-  }, [gameOver, score, handleRestart])
 
   const handlePlay = useCallback(async () => {
     if (game.currentNote === null) return
