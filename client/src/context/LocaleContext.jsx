@@ -49,6 +49,13 @@ const dict = {
     'notfound.title': '404',
     'notfound.message': 'Esta página no existe',
     'notfound.back': 'Volver al inicio',
+    'gameover.title': '¡Juego terminado!',
+    'gameover.namePrompt': 'Ingresá tu nombre para guardar tu puntaje',
+    'gameover.submit': 'Guardar puntaje',
+    'gameover.skip': 'Omitir',
+    'gameover.saving': 'Guardando...',
+    'gameover.saved': '¡Puntaje guardado!',
+    'gameover.playAgain': 'Jugar de nuevo',
   },
   en: {
     'app.title': '♫ Guess the Note',
@@ -98,6 +105,13 @@ const dict = {
     'notfound.title': '404',
     'notfound.message': 'This page does not exist',
     'notfound.back': 'Back to home',
+    'gameover.title': 'Game Over!',
+    'gameover.namePrompt': 'Enter your name to save your score',
+    'gameover.submit': 'Save score',
+    'gameover.skip': 'Skip',
+    'gameover.saving': 'Saving...',
+    'gameover.saved': 'Score saved!',
+    'gameover.playAgain': 'Play again',
   },
 }
 

@@ -3,8 +3,6 @@ import { useAudio } from '../hooks/useAudio.js'
 import { useGameLogic } from '../hooks/useGame.js'
 import { useGame } from '../context/GameContext.jsx'
 import { noteName, midiToFreq } from '../utils/notes.js'
-import { saveScore } from '../services/api.js'
-import { getPlayerName } from './NamePrompt.jsx'
 import { useLocale } from '../context/LocaleContext.jsx'
 import ModeSelector from './ModeSelector.jsx'
 import ScoreBoard from './ScoreBoard.jsx'
@@ -12,13 +10,14 @@ import NoteDisplay from './NoteDisplay.jsx'
 import Piano from './Piano.jsx'
 import Guitar from './Guitar.jsx'
 import SliderFreq from './SliderFreq.jsx'
+import GameOverModal from './GameOverModal.jsx'
 
 const MIN_SLIDER_FREQ = 130.81
 const MAX_SLIDER_FREQ = 523.25
 
 export default function GameBoard() {
   const { t } = useLocale()
-  const { mode, setMode, addResult, resetGame, score, total, streak } = useGame()
+  const { mode, setMode, addResult, resetGame, restartGame, score, total, streak, gameOver } = useGame()
   const { playNote, playSliderFreq, startSliderFreq, updateSliderFreq, stopSlider } = useAudio()
   const game = useGameLogic()
   const [sliderGuessFreq, setSliderGuessFreq] = useState(null)
@@ -48,30 +47,21 @@ export default function GameBoard() {
     }
   }, [game.currentNote, game, mode, playNote, playSliderFreq])
 
-  const saveGameScore = useCallback((correct) => {
-    const playerName = getPlayerName()
-    if (playerName) {
-      saveScore(playerName, mode, correct ? 1 : 0, 1).catch((err) => console.error('Error guardando score:', err.response?.data || err.message))
-    }
-  }, [mode])
-
   const handlePianoClick = useCallback((midi) => {
     if (game.feedback) return
     const correct = game.checkAnswer(midi)
     if (correct !== null) {
       addResult(correct)
-      saveGameScore(correct)
     }
-  }, [game, addResult, saveGameScore])
+  }, [game, addResult])
 
   const handleGuitarClick = useCallback((midi) => {
     if (game.feedback) return
     const correct = game.checkAnswer(midi)
     if (correct !== null) {
       addResult(correct)
-      saveGameScore(correct)
     }
-  }, [game, addResult, saveGameScore])
+  }, [game, addResult])
 
   const handleSliderChange = useCallback((freq) => {
     setSliderGuessFreq(freq)
@@ -94,8 +84,7 @@ export default function GameBoard() {
     addResult(correct)
     setSliderConfirmed(true)
     stopSlider(true)
-    saveGameScore(correct)
-  }, [game, sliderGuessFreq, addResult, stopSlider, saveGameScore])
+  }, [game, sliderGuessFreq, addResult, stopSlider])
 
   const handleNext = useCallback(() => {
     setSliderGuessFreq(null)
@@ -103,6 +92,13 @@ export default function GameBoard() {
     stopSlider(true)
     startRound()
   }, [startRound, stopSlider])
+
+  const handleRestart = useCallback(() => {
+    restartGame()
+    game.setFeedback(null)
+    stopSlider(true)
+    startRound()
+  }, [restartGame, game, stopSlider, startRound])
 
   const handleModeChange = useCallback((m) => {
     setMode(m)
@@ -129,6 +125,8 @@ export default function GameBoard() {
 
       <ScoreBoard score={score} total={total} streak={streak} />
 
+      {!gameOver && (
+        <>
       <button
         onClick={handlePlay}
         disabled={!!game.feedback}
@@ -185,6 +183,18 @@ export default function GameBoard() {
         <button onClick={handleNext} className="line-art-btn px-8 py-2 text-sm mt-2">
           {t('game.next')}
         </button>
+      )}
+      </>
+      )}
+
+      {gameOver && (
+        <GameOverModal
+          score={score}
+          total={total}
+          streak={streak}
+          mode={mode}
+          onRestart={handleRestart}
+        />
       )}
     </div>
   )
