@@ -1,10 +1,8 @@
 import { Outlet, Link, useLocation } from 'react-router-dom'
-import { useAuth } from '../context/AuthContext.jsx'
 import VolumeControl from './VolumeControl.jsx'
 import BackgroundMusic from './BackgroundMusic.jsx'
 
 export default function Layout() {
-  const { user, signOut } = useAuth()
   const location = useLocation()
 
   const linkClass = (path) =>
@@ -29,19 +27,6 @@ export default function Layout() {
           <div className="flex items-center gap-6 text-sm font-medium">
             <Link to="/game" className={linkClass('/game')}>Jugar</Link>
             <Link to="/leaderboard" className={linkClass('/leaderboard')}>Ranking</Link>
-            {user ? (
-              <div className="flex items-center gap-4">
-                <span className="text-white/40 text-sm">{user.username}</span>
-                <button
-                  onClick={signOut}
-                  className="text-white/30 hover:text-white/60 transition-all duration-200 text-sm"
-                >
-                  Salir
-                </button>
-              </div>
-            ) : (
-              <Link to="/login" className={linkClass('/login')}>Ingresar</Link>
-            )}
           </div>
         </nav>
       </header>

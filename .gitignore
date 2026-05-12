@@ -1,7 +1,5 @@
 node_modules/
 dist/
-data.db
-*.log
+server/data.db*
+server/*.log
 .env
-client/public/hero.mp4
-skills-lock.json

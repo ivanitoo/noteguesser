@@ -1,34 +1,36 @@
 import { Router } from 'express'
-import { getAll, insert } from '../db.js'
-import { authMiddleware } from '../middleware/auth.js'
+import { supabase } from '../db.js'
 
 const router = Router()
 
-router.post('/', authMiddleware, (req, res) => {
-  const { mode, score, total } = req.body
-  if (!mode || score === undefined || total === undefined) {
-    return res.status(400).json({ error: 'mode, score y total requeridos' })
+router.post('/', async (req, res) => {
+  const { player_name, mode, score, total } = req.body
+
+  if (!player_name || typeof player_name !== 'string' || player_name.trim().length === 0) {
+    return res.status(400).json({ error: 'player_name requerido' })
   }
-  if (!['piano', 'guitar', 'slider'].includes(mode)) {
+  if (player_name.trim().length > 30) {
+    return res.status(400).json({ error: 'player_name demasiado largo (máx 30)' })
+  }
+  if (!mode || !['piano', 'guitar', 'slider'].includes(mode)) {
     return res.status(400).json({ error: 'Modo inválido' })
   }
+  if (typeof score !== 'number' || typeof total !== 'number' || total <= 0 || score < 0) {
+    return res.status(400).json({ error: 'score y total deben ser números válidos' })
+  }
+
   try {
-    insert('INSERT INTO scores (user_id, mode, score, total) VALUES (?, ?, ?, ?)', [req.userId, mode, score, total])
+    const { error } = await supabase.from('scores').insert({
+      player_name: player_name.trim(),
+      mode,
+      score,
+      total,
+    })
+    if (error) throw error
     res.status(201).json({ success: true })
   } catch (err) {
+    console.error('Error al guardar score:', err)
     res.status(500).json({ error: 'Error al guardar score' })
-  }
-})
-
-router.get('/history', authMiddleware, (req, res) => {
-  try {
-    const rows = getAll(
-      'SELECT id, mode, score, total, created_at FROM scores WHERE user_id = ? ORDER BY created_at DESC LIMIT 50',
-      [req.userId]
-    )
-    res.json(rows)
-  } catch (err) {
-    res.status(500).json({ error: 'Error al obtener historial' })
   }
 })
 

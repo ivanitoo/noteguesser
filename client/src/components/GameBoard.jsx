@@ -2,9 +2,9 @@ import { useState, useCallback, useEffect, useRef } from 'react'
 import { useAudio } from '../hooks/useAudio.js'
 import { useGameLogic } from '../hooks/useGame.js'
 import { useGame } from '../context/GameContext.jsx'
-import { useAuth } from '../context/AuthContext.jsx'
 import { noteName, midiToFreq } from '../utils/notes.js'
 import { saveScore } from '../services/api.js'
+import { getPlayerName } from './NamePrompt.jsx'
 import ModeSelector from './ModeSelector.jsx'
 import ScoreBoard from './ScoreBoard.jsx'
 import NoteDisplay from './NoteDisplay.jsx'
@@ -17,7 +17,6 @@ const MAX_SLIDER_FREQ = 523.25
 
 export default function GameBoard() {
   const { mode, setMode, addResult, resetGame, score, total, streak } = useGame()
-  const { user } = useAuth()
   const { playNote, playSliderFreq, startSliderFreq, updateSliderFreq, stopSlider } = useAudio()
   const game = useGameLogic()
   const [sliderGuessFreq, setSliderGuessFreq] = useState(null)
@@ -48,10 +47,11 @@ export default function GameBoard() {
   }, [game.currentNote, game, mode, playNote, playSliderFreq])
 
   const saveGameScore = useCallback((correct) => {
-    if (user) {
-      saveScore(mode, correct ? 1 : 0, 1).catch(() => {})
+    const playerName = getPlayerName()
+    if (playerName) {
+      saveScore(playerName, mode, correct ? 1 : 0, 1).catch(() => {})
     }
-  }, [user, mode])
+  }, [mode])
 
   const handlePianoClick = useCallback((midi) => {
     if (game.feedback) return
